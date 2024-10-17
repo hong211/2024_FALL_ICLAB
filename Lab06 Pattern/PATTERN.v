@@ -163,19 +163,19 @@ end endtask
 
 task wait_out_valid_task; begin
     latency = 0;
-    // while (out_valid !== 1'b1) begin
-    //     latency = latency + 1;
-    //     if (latency == 1000) begin
-    //         display_fail;
-    //         $display("********************************************************");     
-    //         $display("                          FAIL!                           ");
-    //         $display("*  The execution latency exceeded 1000 cycles at %8t   *", $time);
-    //         $display("********************************************************");
-    //         repeat (2) @(negedge clk);
-    //         $finish;
-    //     end
-    //     @(negedge clk);
-    // end
+    while (out_valid !== 1'b1) begin
+        latency = latency + 1;
+        if (latency == 1000) begin
+            display_fail;
+            $display("********************************************************");     
+            $display("                          FAIL!                           ");
+            $display("*  The execution latency exceeded 1000 cycles at %8t   *", $time);
+            $display("********************************************************");
+            repeat (2) @(negedge clk);
+            $finish;
+        end
+        @(negedge clk);
+    end
     total_latency = total_latency + latency;
 end endtask
 
@@ -184,28 +184,28 @@ end endtask
 task check_ans; begin
     calculate_golden_outdata;
     write_output_to_file;
-    // if (out_data !== golden_outdata) begin
-    //     display_fail;
-    //     $display("************************************************************");  
-    //     $display("                          FAIL!                           ");
-    //     $display("            golden_data = %d, your out_data = %d    ", golden_outdata, out_data);
-    //     $display("************************************************************");
-    //     repeat (9) @(negedge clk);
-    //     $finish;
-    // end 
+    if (out_data !== golden_outdata) begin
+        display_fail;
+        $display("************************************************************");  
+        $display("                          FAIL!                           ");
+        $display("            golden_data = %d, your out_data = %d    ", golden_outdata, out_data);
+        $display("************************************************************");
+        repeat (9) @(negedge clk);
+        $finish;
+    end 
 
-    // @(negedge clk);
+    @(negedge clk);
         
-    // // Check if the number of outputs matches the expected count
-    // if(out_valid === 1'b1) begin
-    //     display_fail;
-    //     $display("************************************************************");  
-    //     $display("                          FAIL!                              ");
-    //     $display("                Expected one valid output                    ");
-    //     $display("************************************************************");
-    //     repeat(9) @(negedge clk);
-    //     $finish;
-    // end
+    // Check if the number of outputs matches the expected count
+    if(out_valid === 1'b1) begin
+        display_fail;
+        $display("************************************************************");  
+        $display("                          FAIL!                              ");
+        $display("                Expected one valid output                    ");
+        $display("************************************************************");
+        repeat(9) @(negedge clk);
+        $finish;
+    end
 end endtask
 
 
