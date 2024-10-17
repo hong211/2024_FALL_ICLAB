@@ -1,1 +1,1 @@
-# 2024_fall_iclab
+# 2024_Fall_ICLAB
