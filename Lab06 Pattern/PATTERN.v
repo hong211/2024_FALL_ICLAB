@@ -7,18 +7,17 @@
 
 
 `define PATNUM 10
-`define SEED 31
 
 module PATTERN(
     // Output signals
     clk,
-	rst_n,
-	in_valid,
+ rst_n,
+ in_valid,
     in_data, 
-	in_mode,
+ in_mode,
     // Input signals
     out_valid, 
-	out_data
+ out_data
 );
 
 // ========================================
@@ -34,20 +33,19 @@ input [206:0] out_data;
 //================================================================
 // clock
 //================================================================
-
-real	CYCLE = `CYCLE_TIME;
-always	#(CYCLE/2.0) clk = ~clk;
-initial	clk = 0;
+reg clk;
+real CYCLE = `CYCLE_TIME;
+always #(CYCLE/2.0) clk = ~clk;
+initial clk = 0;
 
 integer PATNUM = `PATNUM;
-integer SEED = `SEED;
 integer patcount;
 integer latency, total_latency;
 localparam [8:0] in_mode_array [0:2] = {9'b010101000, 9'b100001100, 9'b011001100};
 integer mode_idx;
 integer file;
 
-reg [206:0] golden_outdata;
+reg signed[206:0] golden_outdata;
 
 
 reg signed [10:0] golden_in_data[0:3][0:3];
@@ -55,9 +53,11 @@ reg [14:0] in_data_temp[0:3][0:3];
 reg signed [22:0] out_temp_two_by_two[0:8];
 reg signed [50:0] out_temp_three_by_three[0:3];
 reg signed [206:0] out_temp_four_by_four;
-
+reg signed [206:0] si_out_data;
 reg [8:0] in_mode_temp;
 reg [8:0] in_mode_flip;
+reg signed [22:0] your_out_2 [0:8];
+reg signed [50:0] your_out_3 [0:3];
 
 
 reg [4:0] golden_in_mode;
@@ -84,16 +84,16 @@ initial begin
 
     reset_task;
     file = $fopen("../00_TESTBED/debug.txt", "w");
-	for( patcount = 0; patcount < PATNUM; patcount++) begin	
-        repeat($urandom_range(2,4)) @(negedge clk);	
+ for( patcount = 0; patcount < PATNUM; patcount++) begin 
+        repeat($urandom_range(2,4)) @(negedge clk); 
         input_task;
         write_input_to_file;
         wait_out_valid_task;
-		check_ans;
+  check_ans;
         $display("\033[0;34mPASS PATTERN NO.%4d,\033[m \033[0;32mExecution Cycle: %3d, \033[0;33m", patcount + 1, latency);
-		
-	end
-	display_pass;
+  
+ end
+ display_pass;
     repeat(3) @(negedge clk);
     $finish;
 end
@@ -131,20 +131,30 @@ end endtask
 
 
 task input_task; begin
+    integer i,j;
     in_valid = 1'b1;
-    for(integer i = 0; i < 16; i = i + 1) begin
-        in_data = $urandom() % 323768;   // 15-bit random data
+    for(i = 0; i < 16; i = i + 1) begin
+        in_data = $urandom_range(0, 32767);   // 15-bit random data
         in_data_temp[i / 4][i % 4] = in_data;
         if(i == 0)begin
-            mode_idx = $urandom() % 3;
+            mode_idx = $urandom_range(0, 2);
             in_mode_flip = in_mode_array[mode_idx];
+            $display("correct: %b",{in_mode_flip[6],in_mode_flip[4],in_mode_flip[3],in_mode_flip[2],in_mode_flip[0]});
             flip_bit = $urandom_range(0, 10);
             if(flip_bit < 9)begin
                 in_mode_flip[5 + 4 - flip_bit] = ~in_mode_flip[5 + 4 - flip_bit];
             end
             in_mode = in_mode_flip;
             in_mode_temp = in_mode_flip;
-            mode_decode;
+            //decode mode here!
+            error_bit = 0;
+            for(j = 0; j < 5 + 4; j = j + 1) begin
+                if(in_mode_flip[5 + 4 - j - 1] === 1'b1)begin
+                    error_bit = error_bit ^ (j + 1);
+                end
+            end
+            in_mode_flip[5 + 4 - error_bit] = ~in_mode_flip[5 + 4 - error_bit];
+            golden_in_mode = {in_mode_flip[6],in_mode_flip[4],in_mode_flip[3],in_mode_flip[2],in_mode_flip[0]};
 
         end
         else begin
@@ -182,17 +192,37 @@ end endtask
 
 
 task check_ans; begin
+    si_out_data = out_data;
     calculate_golden_outdata;
     write_output_to_file;
+    
+
     if (out_data !== golden_outdata) begin
-        display_fail;
-        $display("************************************************************");  
-        $display("                          FAIL!                           ");
-        $display("            golden_data = %d, your out_data = %d    ", golden_outdata, out_data);
-        $display("************************************************************");
+        if (golden_in_mode == 5'b00100) begin
+            $display ("                          matrix size is 2*2                  ");
+            $display ("            determinant should be : %d\t%d\t%d           ", out_temp_two_by_two[0], out_temp_two_by_two[1], out_temp_two_by_two[2]);
+            $display ("                                    %d\t%d\t%d           ", out_temp_two_by_two[3], out_temp_two_by_two[4], out_temp_two_by_two[5]);
+            $display ("                                    %d\t%d\t%d           ", out_temp_two_by_two[6], out_temp_two_by_two[7], out_temp_two_by_two[8]);
+            $display ("            your answer is        : %d\t%d\t%d           ",  out_data[206:184], out_data[183:161], out_data[160:138]);
+            $display ("                                    %d\t%d\t%d           ", out_data[137:115], out_data[114:92], out_data[91:69]);
+            $display ("                                    %d\t%d\t%d           ", out_data[68:46], out_data[45:23], out_data[22:0]);
+        end
+        else if (golden_in_mode == 5'b00110) begin
+            $display ("                          matrix size is 3*3                  ");
+            $display ("            determinant should be : %d\t%d           ", out_temp_three_by_three[0], out_temp_three_by_three[1]);
+            $display ("                                    %d\t%d           ", out_temp_three_by_three[2], out_temp_three_by_three[3]);
+            $display ("            your answer is        : %d\t%d           ", out_data[203:153], out_data[152:102]);
+            $display ("                                    %d\t%d           ", out_data[101:51], out_data[50:0]);
+        end 
+        else begin
+            $display ("                          matrix size is 4*4                  ");
+            $display ("            determinant should be : %d           ", out_temp_four_by_four);
+            $display ("            your answer is        : %d           ", si_out_data);
+        end
         repeat (9) @(negedge clk);
         $finish;
-    end 
+    end
+    
 
     @(negedge clk);
         
@@ -210,15 +240,20 @@ end endtask
 
 
 
-task mode_decode;begin
-    for(integer i = 0; i < 5 + 4; i = i + 1) begin
-        if(in_mode_temp[5 + 4 - i - 1] === 1'b1)begin
-            error_bit = error_bit ^ (i + 1);
-        end
-    end
-    in_mode_temp[5 + 4 - error_bit] = ~in_mode_temp[5 + 4 - error_bit];
-    golden_in_mode = {in_mode_temp[6],in_mode_temp[4],in_mode_temp[3],in_mode_temp[2],in_mode_temp[0]};
-end endtask
+// task mode_decode;begin
+//     integer i;
+//     for(integer i = 0; i < 5 + 4; i = i + 1) begin
+//         error_bit = 0;
+//         if(in_mode_temp[5 + 4 - i - 1] === 1'b1)begin
+//             error_bit = error_bit ^ (i + 1);
+//         end
+//     end
+//     $display("%d",error_bit);
+//     $display("func in: %b",in_mode_temp[i]);
+//     in_mode_temp[5 + 4 - error_bit] = ~in_mode_temp[5 + 4 - error_bit];
+//     golden_in_mode = {in_mode_temp[6],in_mode_temp[4],in_mode_temp[3],in_mode_temp[2],in_mode_temp[0]};
+//     $display("func out :%b",golden_in_mode[i]);
+// end endtask
 
 
 
@@ -227,23 +262,23 @@ end endtask
 task in_data_decode;begin
     for(integer i = 0; i < 4 ; i = i + 1)begin
         for(integer j = 0; j < 4 ; j = j + 1)begin
-
-            for(integer k = 0; k < 10 + 4; k = k + 1) begin
-                if(in_data_temp[i][j][10 + 4 - k - 1] === 1'b1)begin
+            error_bit = 0;
+            for(integer k = 0; k < 11 + 4; k = k + 1) begin
+                if(in_data_temp[i][j][11 + 4 - k - 1] === 1'b1)begin
                     error_bit = error_bit ^ (k + 1);
                 end
             end
-
-            in_data_temp[i][j][10 + 4 - error_bit] = ~in_data_temp[i][j][10 + 4 - error_bit];
+            // $display("%d",error_bit);
+            // $display("in: %b",in_data_temp[i][j]);
+            in_data_temp[i][j][11 + 4 - error_bit] = ~in_data_temp[i][j][11 + 4 - error_bit];
 
             golden_in_data[i][j] = {in_data_temp[i][j][12],in_data_temp[i][j][10],in_data_temp[i][j][9],in_data_temp[i][j][8],
                 in_data_temp[i][j][6],in_data_temp[i][j][5],in_data_temp[i][j][4],in_data_temp[i][j][3],in_data_temp[i][j][2],
                 in_data_temp[i][j][1],in_data_temp[i][j][0]};
+            // $display("out :%b",golden_in_data[i][j]);
         end 
     end
 end endtask
-
-
 
 task calculate_golden_outdata;begin
     
