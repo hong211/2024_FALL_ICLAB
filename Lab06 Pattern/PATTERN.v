@@ -44,7 +44,7 @@ localparam [8:0] in_mode_array [0:2] = {9'b010101000, 9'b100001100, 9'b011001100
 integer mode_idx;
 integer file;
 
-reg signed[206:0] golden_outdata;
+reg [206:0] golden_outdata;
 
 
 reg signed [10:0] golden_in_data[0:3][0:3];
@@ -399,7 +399,7 @@ task write_output_to_file; begin
     $fwrite(file, "%20d\n", out_temp_four_by_four);
 
     $fwrite(file, "==========  golden out_data  ========\n");
-    $fwrite(file, "%20d\n\n\n\n\n", golden_outdata);
+    $fwrite(file, "%d\t\n\n\n\n\n", golden_outdata);
 end endtask
 
 
