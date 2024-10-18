@@ -373,7 +373,7 @@ task write_input_to_file; begin
     $fwrite(file, "===========  in_data  ===========\n");
     for(integer i = 0; i < 4; i = i + 1) begin
         for(integer j = 0; j < 4; j = j + 1) begin
-            $fwrite(file, "%7d ", golden_in_data[i][j]);
+            $fwrite(file, "%7d\t ", golden_in_data[i][j]);
         end
         $fwrite(file, "\n");
     end
@@ -384,23 +384,23 @@ end endtask
 task write_output_to_file; begin
     $fwrite(file, "===========  2 * 2   =========\n");
     for(integer i = 0; i < 9; i = i + 1) begin
-        $fwrite(file, "%10d ", out_temp_two_by_two[i]);
+        $fwrite(file, "%10d\t ", out_temp_two_by_two[i]);
         if(i % 3 == 2)begin
             $fwrite(file, "\n");
         end
     end
     $fwrite(file, "===========  3 * 3   ========\n");
     for(integer i = 0; i < 4; i = i + 1) begin
-        $fwrite(file, "%15d ", out_temp_three_by_three[i]);
+        $fwrite(file, "%15d\t", out_temp_three_by_three[i]);
         if(i % 2 == 1)begin
             $fwrite(file, "\n");
         end
     end
     $fwrite(file, "===========  4 * 4   =========\n");
-    $fwrite(file, "%100d\n", out_temp_four_by_four);
+    $fwrite(file, "%20d\t\n", out_temp_four_by_four);
 
     $fwrite(file, "==========  golden out_data  ========\n");
-    $fwrite(file, "%100d\n\n\n\n\n", golden_outdata);
+    $fwrite(file, "%20d\t\n\n\n\n\n", golden_outdata);
 end endtask
 
 
