@@ -140,10 +140,8 @@ task input_task; begin
     
     
     in_pic_no = $random(seed) % 'd16;
-    in_mode = 1'b1;
-    in_ratio_mode = 2'b11;
-    // in_mode = $random(seed) % 'd2;
-    // in_ratio_mode = (in_mode) ? $random(seed) % 'd4 : 2'bx;
+    in_mode = $random(seed) % 'd2;
+    in_ratio_mode = (in_mode) ? $random(seed) % 'd4 : 2'bx;
     golden_in_ratio_mode = in_ratio_mode;
     golden_in_pic_no = in_pic_no;
     golden_in_mode = in_mode;
