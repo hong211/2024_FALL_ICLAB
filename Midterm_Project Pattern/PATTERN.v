@@ -166,11 +166,7 @@ end endtask
 
 
 task calculate_ans;begin
-    
-
-    
-    
-
+   
 
     if(golden_in_mode == 1'b0)begin
         for(integer i = 0; i < 3; i = i + 1)begin
@@ -364,7 +360,7 @@ end endtask
 
 task write_to_file; begin
     
-    $fwrite(file, "==========  GOLDEN_IN_MODE.%b  ==============\n", golden_in_mode);   
+    $fwrite(file, "==========  GOLDEN_IN_MODE is %b  ==============\n", golden_in_mode);   
     if(golden_in_mode == 1'b0)begin
         $fwrite(file, "===========    TWO_BY_TWO     ============\n");
         for(integer i = 0; i < 2; i = i + 1) begin
