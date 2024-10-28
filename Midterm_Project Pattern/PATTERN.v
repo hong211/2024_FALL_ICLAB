@@ -306,16 +306,43 @@ task check_ans; begin
         end
     end
     else begin
-        if(out_data > golden_out_data + 1 || out_data < golden_out_data - 1)begin
-            display_fail;
-            $display("********************************************************");     
-            $display("                FAIL error is large than 1 !                ");
-            $display("*               The golden_in_mode is %d               *", golden_in_mode);
-            $display("*  The golden_out_data is %d, but your out_data is %d  *", golden_out_data, out_data);
-            $display("********************************************************");
-            repeat (2) @(negedge clk);
-            $finish;
+        if(golden_out_data == 0)begin
+            if(out_data !== 1 && out_data !== 0)begin
+                display_fail;
+                $display("********************************************************");     
+                $display("                FAIL error is large than 1 !                ");
+                $display("*               The golden_in_mode is %d               *", golden_in_mode);
+                $display("*  The golden_out_data is %d, but your out_data is %d  *", golden_out_data, out_data);
+                $display("********************************************************");
+                repeat (2) @(negedge clk);
+                $finish;
+            end
         end
+        else if(golden_out_data == 255)begin
+            if(out_data !== 255 && out_data !== 254)begin
+                display_fail;
+                $display("********************************************************");     
+                $display("                FAIL error is large than 1 !                ");
+                $display("*               The golden_in_mode is %d               *", golden_in_mode);
+                $display("*  The golden_out_data is %d, but your out_data is %d  *", golden_out_data, out_data);
+                $display("********************************************************");
+                repeat (2) @(negedge clk);
+                $finish;
+            end
+        end
+        else begin
+            if(out_data > golden_out_data + 1 || out_data < golden_out_data - 1)begin
+                display_fail;
+                $display("********************************************************");     
+                $display("                FAIL error is large than 1 !                ");
+                $display("*               The golden_in_mode is %d               *", golden_in_mode);
+                $display("*  The golden_out_data is %d, but your out_data is %d  *", golden_out_data, out_data);
+                $display("********************************************************");
+                repeat (2) @(negedge clk);
+                $finish;
+            end
+        end
+        
     end
 
 end endtask
