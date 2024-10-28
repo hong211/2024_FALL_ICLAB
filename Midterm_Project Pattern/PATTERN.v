@@ -55,8 +55,8 @@ reg [7:0] two_by_two [0:1][0:1];
 reg [7:0] four_by_four [0:3][0:3];
 reg [7:0] six_by_six [0:5][0:5];
 
-reg [15:0] out_data_temp;
-reg [15:0] D_constrate [0:2];
+reg [31:0] out_data_temp;
+reg [31:0] D_constrate [0:2];
 
 //////////////////////////////////////////////////////////////////////
 // Write your own task here
