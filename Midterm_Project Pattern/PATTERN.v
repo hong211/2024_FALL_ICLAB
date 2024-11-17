@@ -1,16 +1,14 @@
 
 `ifdef RTL
-    `define CYCLE_TIME 3.2
+    `define CYCLE_TIME 3.7
 `endif
 `ifdef GATE
-    `define CYCLE_TIME 3.2
+    `define CYCLE_TIME 3.7
 `endif
 
 `define DRAM_PATH "../00_TESTBED/DRAM/dram0.dat"
-`define PATNUM 10000
+`define PATNUM 1000
 `define SEED 120
-
-// toxic : 120
 
 `include "../00_TESTBED/pseudo_DRAM.v"
 
