@@ -1,13 +1,13 @@
-# 2024_Fall_ICLAB
+![image](https://github.com/user-attachments/assets/1cd12ee5-4a99-46e4-8e1b-a27fc0757935)# 2024_Fall_ICLAB
 
 |  | rank | demo | score |  | rank | demo | score |
 | :---: | :---: | :---: | :---: | :---:  | :---:| :---: | :---: |
-| Lab01 | 5  |1de      | 99.22 | Lab07 | 24 |1de| 86.21 |
-| Lab02 | 4  |1de      | 99.42 | Lab08 |  3 |1de| 96.84 |
-| Lab03 | 9  |spec5 2de| 98.3  | Lab09 |  3 |1de| 90.44 |
-| Lab04 | 62 |1de      | 86.93 | Lab10 | 26 |1de|  89.3 |
-| Lab05 | 33 |1de      | 92.2  | Lab11 | 45 |2de| 99.16 |
+| Lab01 | 5  |1de      | 99.22 | Lab07 | 24 |1de| 99.17 |
+| Lab02 | 4  |1de      | 99.42 | Lab08 |  3 |1de| 99.56 |
+| Lab03 | 9  |spec5 2de| 98.3  | Lab09 |  3 |1de| 99.56 |
+| Lab04 | 62 |1de      | 86.93 | Lab10 | 26 |1de| 98.16 |
+| Lab05 | 33 |1de      | 92.2  | Lab11 | 45 |2de| 62.73 |
 | Lab06 | 1 |1de      |  100   | Lab12 | -- | | |
-| MP     | 22 |1de  | 100 | Final| -- | -- | | 
+| MP     | 22 |1de  | 95.53 | Final| -- | -- | | 
 | OT     | -- |1de  | 100 | FP   |    |    | |
 | Midterm| -- | --  | 100 | Total| -- |    | |
