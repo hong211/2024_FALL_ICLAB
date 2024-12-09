@@ -10,4 +10,4 @@
 | Lab06 | 1 |1de      |  100   | Lab12 | -- | | |
 | MP     | 22 |1de  | 95.53 | Final| -- | -- | | 
 | OT     | -- |1de  | 100 | FP   |    |    | |
-| Midterm| -- | --  | 100 | Total| -- |    | |
+| Midterm| -- | --  | 100 | Total|    | -- | |
