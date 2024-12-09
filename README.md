@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/1cd12ee5-4a99-46e4-8e1b-a27fc0757935)# 2024_Fall_ICLAB
+# 2024_Fall_ICLAB
 
 |  | rank | demo | score |  | rank | demo | score |
 | :---: | :---: | :---: | :---: | :---:  | :---:| :---: | :---: |
