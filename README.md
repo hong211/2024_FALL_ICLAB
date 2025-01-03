@@ -1,6 +1,7 @@
 # 2024_Fall_ICLAB
 
-Total score : 100.56 rank : 5
+Total score : 100.56 
+rank : 5
 |  | rank | demo | score |  | rank | demo | score |
 | :---: | :---: | :---: | :---: | :---:  | :---:| :---: | :---: |
 | Lab01 | 5  |1de      | 99.22 | Lab07 | 24 |1de| 99.17 |
@@ -11,4 +12,4 @@ Total score : 100.56 rank : 5
 | Lab06 | 1 |1de      |  100   | Lab12 | -- |1de| 100   |
 | Midterm| -- | --  | 100 | Bonus| -- | -- | 100 | 
 | OT     | -- |1de  | 100 | Final  | -- | --  | 97.5 |
-| MP     | 22 |1de  | 95.53 | FP  |  |   |  |
+| MP     | 22 |1de  | 95.53 | FP  | 26 | 1de | 94.4 |
